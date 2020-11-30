@@ -19,6 +19,8 @@ while True:
     for y in range(len(grid[0])):
       if x == gridPlayer[0] and y == gridPlayer[1]:
         grid[x][y] = "🧍"
+      elif noise.snoise2(x / freq, y / freq, octaves) > 0.8:
+        grid[x][y] = "🟩" 
       elif noise.snoise2(x / freq, y / freq, octaves) > 0:
         grid[x][y] = wall
       else:
@@ -29,12 +31,30 @@ while True:
     print(*s)
 
   print("Press either: 'w', 's', 'a' or 'd' to move")
-  move = getch.getch()
-  if move == 'w':
-    gridPlayer[0] = gridPlayer[0] - 1
-  if move == 's':
-    gridPlayer[0] = gridPlayer[0] + 1
-  if move == 'a':
-    gridPlayer[1] = gridPlayer[1] - 1
-  if move == 'd':
-    gridPlayer[1] = gridPlayer[1] + 1
+  if grid[gridPlayer[0]][gridPlayer[1]] == "🟩":
+    print("Treasure :")
+  while True:
+    move = getch.getch()
+    try:
+      if move == 'w':
+        if grid[gridPlayer[0] - 1][gridPlayer[1]] == "⬛":
+          continue
+        gridPlayer[0] = gridPlayer[0] - 1
+        break
+      if move == 's':
+        if grid[gridPlayer[0] + 1][gridPlayer[1]] == "⬛":
+          continue
+        gridPlayer[0] = gridPlayer[0] + 1
+        break
+      if move == 'a':
+        if grid[gridPlayer[0]][gridPlayer[1] - 1] == "⬛":
+          continue
+        gridPlayer[1] = gridPlayer[1] - 1
+        break
+      if move == 'd':
+        if grid[gridPlayer[0]][gridPlayer[1] + 1] == "⬛":
+          continue
+        gridPlayer[1] = gridPlayer[1] + 1
+        break
+    except IndexError:
+      continue
